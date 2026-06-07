@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+  maven:
+    build: .
+    container_name: mavencont
+    ports:
+      - "3000:3000"
+
+  mysql:
+    image: mysql:8
+    container_name: mysqlcont
+    environment:
+      - MYSQL_ROOT_PASSWORD=pass123
+    ports:
+      - "8082:3306"
+    volumes:
+      - appdata:/var/lib/mysql
+
+volumes:
+  appdata:
