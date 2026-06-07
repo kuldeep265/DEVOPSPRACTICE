@@ -19,4 +19,4 @@ services:
       - appdata11:/var/lib/mysql
 
 volumes:
-  appdata:
+  appdata11:
