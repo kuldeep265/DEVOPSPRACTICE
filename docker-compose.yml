@@ -3,7 +3,6 @@ version: '3.9'
 services:
   maven:
     build: .
-    image: kuldeep7860/mavenimgg:latest
     container_name: mavencont11
     ports:
       - "3000:3000"

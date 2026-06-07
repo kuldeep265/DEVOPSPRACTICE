@@ -1,31 +1,48 @@
 pipeline {
     agent any
 
+    environment {
+        DOCKER_IMAGE = 'kuldeep7860/mavenimg'
+    }
+
     stages {
-        stage('Clone Repository') {
+
+        stage('clone repo') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/kuldeep265/DEVOPSPRACTICE.git'
+                    url: 'https://github.com/kuldeep265/DEVOPSPRACTICE2.git'
             }
         }
 
-        stage('Build and Push') {
+        stage('maven build') {
             steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'dockerhub-creds',
-                    usernameVariable: 'DOCKER_USERNAME',
-                    passwordVariable: 'DOCKER_PASSWORD'
-                )]) {
-                    bat 'echo %DOCKER_PASSWORD%| docker login -u %DOCKER_USERNAME% --password-stdin'
-                    bat 'docker compose build'
-                    bat 'docker compose push maven'
+                bat 'mvn clean package'
+            }
+        }
+
+        stage('build docker image') {
+            steps {
+                bat "docker build -t %DOCKER_IMAGE% ."
+            }
+        }
+
+        stage('docker login and push ') {
+            steps {
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'dockerhub-creds2',
+                        usernameVariable: 'DOCKER_USERNAME',
+                        passwordVariable: 'DOCKER_PASSWORD'
+                    )
+                ]) {
+                    bat 'echo %DOCKER_PASSWORD% | docker login -u %DOCKER_USERNAME% --password-stdin'
+                     bat "docker push %DOCKER_IMAGE%"
                 }
             }
         }
-
-        stage('Deploy') {
+        stage('deploy') {
             steps {
-                bat 'docker compose down '
+                bat 'docker compose down'
                 bat 'docker compose up -d'
             }
         }
@@ -33,11 +50,10 @@ pipeline {
 
     post {
         success {
-            echo 'success'
+            echo 'Pipeline Successful'
         }
-
         failure {
-            echo 'Deployment failed'
+            echo 'Pipeline Failed'
         }
     }
 }
