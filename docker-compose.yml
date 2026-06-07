@@ -3,6 +3,7 @@ version: '3.9'
 services:
   maven:
     build: .
+    image: kuldeep7860/mavenimg:latest
     container_name: mavencont
     ports:
       - "3000:3000"
