@@ -31,11 +31,11 @@ pipeline {
                 withCredentials([
                     usernamePassword(
                         credentialsId: 'dockerhub-creds2',
-                        usernameVariable: 'DOCKER_USERNAME',
-                        passwordVariable: 'DOCKER_PASSWORD'
+                        username: 'DOCKER_USERNAME',
+                        password: 'DOCKER_PASSWORD'
                     )
                 ]) {
-                    bat 'echo username=%DOCKER_USERNAME% '
+                    bat 'echo %DOCKER_PASSWORD% | docker login -u %DOCKER_USERNAME% --password-stdin'
                 }
             }
         }
