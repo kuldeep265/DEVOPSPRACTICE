@@ -4,7 +4,7 @@ services:
   maven:
     build: .
     image: kuldeep7860/mavenimg:latest
-    container_name: mavencont
+    container_name: mavencont11
     ports:
       - "3000:3000"
 
